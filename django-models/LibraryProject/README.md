@@ -1,0 +1,1 @@
+this is the README.md file for this django project which is my first one.
