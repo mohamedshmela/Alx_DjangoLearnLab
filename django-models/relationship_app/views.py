@@ -20,8 +20,12 @@ from django.contrib.auth import login
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView
 
 #login view
+
+class LoginView(TemplateView):
+    template_name= 'relationship_app/login.html'
 
 def user_login(request):
     if request.method == 'POST':
@@ -35,6 +39,9 @@ def user_login(request):
         return render(request, 'relationship_app/login.html', {'form':form})
     
 #logout view
+
+class LogoutView(TemplateView):
+    template_name= 'relationship_app/logout.html'
 
 def user_logout(request):
     logout(request)
