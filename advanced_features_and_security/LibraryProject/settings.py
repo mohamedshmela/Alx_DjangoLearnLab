@@ -120,7 +120,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 
-AUTH_USER_MODEL = 'LibraryProject\bookshelf\models.py\CustomUserModel'
+AUTH_USER_MODEL = 'LibraryProject\bookshelf\models.py\CustomUser'
 
 
 # Default primary key field type
