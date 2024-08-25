@@ -49,7 +49,7 @@ def user_logout(request):
 
 #Registration view
 
-def user_register(request):
+def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
