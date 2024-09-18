@@ -2,10 +2,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status, generics
+from rest_framework import status, generics, permissions
 from .models import CustomUser
 from .serializers import UserRegistrationSerializer
-from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 
 class RegisterView(APIView):
@@ -28,14 +27,14 @@ class CustomObtainAuthToken(ObtainAuthToken):
 class ProfileView(generics.RetrieveUpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserRegistrationSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
         # Return the profile of the currently authenticated user
         return self.request.user
 
-class FollowUserView(APIView):
-    permission_classes = [IsAuthenticated]
+class FollowUserView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):
         user_to_follow = get_object_or_404(CustomUser, id=user_id)
@@ -44,8 +43,8 @@ class FollowUserView(APIView):
             return Response({'status': 'followed'}, status=status.HTTP_200_OK)
         return Response({'error': 'You cannot follow yourself'}, status=status.HTTP_400_BAD_REQUEST)
 
-class UnfollowUserView(APIView):
-    permission_classes = [IsAuthenticated]
+class UnfollowUserView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):
         user_to_unfollow = get_object_or_404(CustomUser, id=user_id)
