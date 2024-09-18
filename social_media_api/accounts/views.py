@@ -6,6 +6,7 @@ from rest_framework import status, generics
 from .models import CustomUser
 from .serializers import UserRegistrationSerializer
 from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
 
 class RegisterView(APIView):
     def post(self, request):
@@ -32,3 +33,22 @@ class ProfileView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         # Return the profile of the currently authenticated user
         return self.request.user
+
+class FollowUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        user_to_follow = get_object_or_404(CustomUser, id=user_id)
+        if user_to_follow != request.user:
+            request.user.following.add(user_to_follow)
+            return Response({'status': 'followed'}, status=status.HTTP_200_OK)
+        return Response({'error': 'You cannot follow yourself'}, status=status.HTTP_400_BAD_REQUEST)
+
+class UnfollowUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        user_to_unfollow = get_object_or_404(CustomUser, id=user_id)
+        if user_to_unfollow != request.user:
+            request.user.following.remove(user_to_unfollow)
+            return Response({'status': 'unfollowed'}, status=status.HTTP_200_OK)
