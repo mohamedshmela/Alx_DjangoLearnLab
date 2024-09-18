@@ -52,3 +52,4 @@ class UnfollowUserView(APIView):
         if user_to_unfollow != request.user:
             request.user.following.remove(user_to_unfollow)
             return Response({'status': 'unfollowed'}, status=status.HTTP_200_OK)
+        return Response({'error': 'You cannot unfollow yourself'}, status=status.HTTP_400_BAD_REQUEST)
