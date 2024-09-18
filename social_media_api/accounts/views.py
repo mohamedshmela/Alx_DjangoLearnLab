@@ -26,7 +26,7 @@ class CustomObtainAuthToken(ObtainAuthToken):
 
 class ProfileView(generics.RetrieveUpdateAPIView):
     queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserRegistrationSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
