@@ -35,9 +35,10 @@ class ProfileView(generics.RetrieveUpdateAPIView):
 
 class FollowUserView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
+    queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
-        user_to_follow = get_object_or_404(CustomUser, id=user_id)
+        user_to_follow = get_object_or_404(self.get_queryset(), id=user_id)
         if user_to_follow != request.user:
             request.user.following.add(user_to_follow)
             return Response({'status': 'followed'}, status=status.HTTP_200_OK)
@@ -45,9 +46,10 @@ class FollowUserView(generics.GenericAPIView):
 
 class UnfollowUserView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
+    queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
-        user_to_unfollow = get_object_or_404(CustomUser, id=user_id)
+        user_to_unfollow = get_object_or_404(self.get_queryset(), id=user_id)
         if user_to_unfollow != request.user:
             request.user.following.remove(user_to_unfollow)
             return Response({'status': 'unfollowed'}, status=status.HTTP_200_OK)
